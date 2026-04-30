@@ -12,7 +12,7 @@ const INITIAL_DATA = `# 矢羽: 合流時だけ
 
 # FizzBuzzの例
 1: term 開始
-2: loop_s FizzBuzz処理\n(i = 1 から 100)
+2: loop_s FizzBuzz処理\\n(i = 1 から 100)
 3: dec 15の倍数？
 4: disp "FizzBuzz"
 5: dec 3の倍数？
