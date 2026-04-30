@@ -1,0 +1,6 @@
+{
+  "name": "JIS Flow",
+  "description": "独自のマークアップ言語からJIS規格に準拠したフローチャートを生成するツール",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
