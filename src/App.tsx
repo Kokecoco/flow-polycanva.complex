@@ -6,36 +6,39 @@ import { Share2, Download, FileJson, Upload } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const INITIAL_DATA = `# 矢羽: 合流時だけ
-# 文字サイズ: 16
-# 横間隔: 200
-# 縦間隔: 100
+# 文字サイズ: 14
+# 横間隔: 220
+# 縦間隔: 120
 
 # FizzBuzzの例
-1: term 開始
-2: loop_s FizzBuzz処理\\n(i = 1 から 100)
-3: dec 15の倍数？
-4: disp "FizzBuzz"
-5: dec 3の倍数？
-6: disp "Fizz"
-7: dec 5の倍数？
-8: disp "Buzz"
-9: disp i
-10: loop_e FizzBuzz処理
-11: term 終了
+start: term 開始
+loop: loop_s FizzBuzz処理\\n(i = 1 から 100)
+mod15: dec 15の倍数？
+dispFB: disp "FizzBuzz"
+mod3: dec 3の倍数？
+dispF: disp "Fizz"
+mod5: dec 5の倍数？
+dispB: disp "Buzz"
+dispNum: disp i
+loopEnd: loop_e ループ終了
+end: term 終了
 
-1 -> 2
-2 -> 3
-3 -> 4 (Yes)
-3 -> 5 (No)
-4 -> 10
-5 -> 6 (Yes)
-5 -> 7 (No)
-6 -> 10
-7 -> 8 (Yes)
-7 -> 9 (No)
-8 -> 10
-9 -> 10
-10 -> 11`;
+start -> loop
+loop -> mod15
+mod15 -> dispFB (Yes)
+mod15 -> mod3 (No)
+dispFB -> loopEnd
+
+mod3 -> dispF (Yes)
+mod3 -> mod5 (No)
+dispF -> loopEnd
+
+mod5 -> dispB (Yes)
+mod5 -> dispNum (No)
+dispB -> loopEnd
+dispNum -> loopEnd
+
+loopEnd -> end`;
 
 export default function App() {
   const [markup, setMarkup] = useState(INITIAL_DATA);
