@@ -34,7 +34,8 @@ export const Editor: React.FC<Props> = ({ value, onChange }) => {
         <p className="mb-2">ID: タイプ 内容 | スタイル(任意)</p>
         <p className="text-slate-400 mb-2">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start: term 開始 | bg:#f00 color:white</code></p>
         <p className="mb-2">ID -{'>'} ターゲット (ラベル)</p>
-        <p className="text-slate-400">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start -{'>'} next (はい)</code></p>
+        <p className="text-slate-400 mb-1">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start -{'>'} next (はい)</code></p>
+        <p className="text-slate-400">連続: <code className="text-slate-300 bg-slate-700 px-1 rounded">a -{'>'} b -{'>'} c</code></p>
         <div className="mt-2 pt-2 border-t border-slate-700">
           <p className="font-bold mb-1">その他の設定:</p>
           <ul className="list-disc list-inside text-slate-300 space-y-1 mb-2">
