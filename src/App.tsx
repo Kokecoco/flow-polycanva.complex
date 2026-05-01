@@ -12,7 +12,7 @@ const INITIAL_DATA = `# 矢羽: 合流時だけ
 
 # FizzBuzzの例
 start: term 開始
-loop: loop_s FizzBuzz処理\\n(i = 1 から 100)
+loop: loop_s FizzBuzz処理\\ni = 1 から 100
 mod15: dec 15の倍数？
 dispFB: disp "FizzBuzz"
 mod3: dec 3の倍数？
@@ -20,7 +20,7 @@ dispF: disp "Fizz"
 mod5: dec 5の倍数？
 dispB: disp "Buzz"
 dispNum: disp i
-loopEnd: loop_e ループ終了
+loopEnd: loop_e FizzBuzz処理
 end: term 終了
 
 start -> loop -> mod15 -> dispFB (Yes) -> loopEnd -> end
