@@ -1,11 +1,17 @@
 export type NodeType = 'start' | 'end' | 'process' | 'decision' | 'io' | 'preparation' | 'display' | 'manual_input' | 'loop_start' | 'loop_end';
 
+export interface FlowNodeStyle {
+  bg?: string;
+  color?: string;
+}
+
 export interface FlowNode {
   id: string;
   type: NodeType;
   text: string;
   level: number;
   column: number;
+  style?: FlowNodeStyle;
 }
 
 export interface FlowEdge {
