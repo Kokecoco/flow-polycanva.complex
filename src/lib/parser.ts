@@ -57,14 +57,25 @@ export function parseFlowchart(text: string): FlowGraph {
 
   // First pass: Find all nodes
   lines.forEach(line => {
-    // Check for connection: id -> target (label)
-    const edgeMatch = line.match(/^([\w\d\-]+)\s*->\s*([\w\d\-]+)(?:\s*\((.*)\))?$/);
-    if (edgeMatch) {
-      edges.push({
-        from: edgeMatch[1],
-        to: edgeMatch[2],
-        label: edgeMatch[3]
-      });
+    // Check for connection chain (e.g., a -> b -> c (label))
+    const edgeChainPattern = /^([\w\d\-]+(?:\s*\([^)]*\))?)(?:\s*->\s*([\w\d\-]+(?:\s*\([^)]*\))?))+$/;
+    if (edgeChainPattern.test(line)) {
+      const parts = line.split('->').map(p => p.trim());
+      for (let i = 0; i < parts.length - 1; i++) {
+        const fromPart = parts[i];
+        const toPart = parts[i + 1];
+        
+        const fromMatch = fromPart.match(/^([\w\d\-]+)/);
+        const toMatch = toPart.match(/^([\w\d\-]+)(?:\s*\((.*)\))?$/);
+        
+        if (fromMatch && toMatch) {
+          edges.push({
+            from: fromMatch[1],
+            to: toMatch[1],
+            label: toMatch[2]
+          });
+        }
+      }
       return;
     }
 
