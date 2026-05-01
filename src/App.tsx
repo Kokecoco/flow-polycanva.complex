@@ -23,22 +23,11 @@ dispNum: disp i
 loopEnd: loop_e ループ終了
 end: term 終了
 
-start -> loop
-loop -> mod15
-mod15 -> dispFB (Yes)
-mod15 -> mod3 (No)
-dispFB -> loopEnd
-
-mod3 -> dispF (Yes)
-mod3 -> mod5 (No)
-dispF -> loopEnd
-
-mod5 -> dispB (Yes)
-mod5 -> dispNum (No)
-dispB -> loopEnd
-dispNum -> loopEnd
-
-loopEnd -> end`;
+start -> loop -> mod15 -> dispFB (Yes) -> loopEnd -> end
+mod15 -> mod3 (No) -> dispF (Yes) -> loopEnd
+mod3 -> mod5 (No) -> dispB (Yes) -> loopEnd
+mod5 -> dispNum (No) -> loopEnd
+`;
 
 export default function App() {
   const [markup, setMarkup] = useState(INITIAL_DATA);
