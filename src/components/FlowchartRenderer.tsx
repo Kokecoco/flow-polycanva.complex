@@ -40,7 +40,7 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
     const w = NODE_WIDTH;
     const h = NODE_HEIGHT;
     const commonProps = {
-      fill: "white",
+      fill: node.style?.bg || "white",
       stroke: "#1e293b",
       strokeWidth: "2"
     };
@@ -136,7 +136,7 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
           fontFamily: 'sans-serif',
           fontSize: `${fontSize}px`,
           fontWeight: 500,
-          fill: '#0f172a',
+          fill: node.style?.color || '#0f172a',
           pointerEvents: 'none',
           userSelect: 'none'
         }}
