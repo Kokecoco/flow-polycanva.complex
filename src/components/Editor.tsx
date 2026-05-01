@@ -31,10 +31,10 @@ export const Editor: React.FC<Props> = ({ value, onChange }) => {
 
       <div className="shrink-0 p-4 bg-slate-800 text-white text-xs border-t border-slate-200 z-10 overflow-y-auto max-h-48">
         <h3 className="font-bold mb-2 flex items-center gap-1"><Info size={14} /> 使い方</h3>
-        <p className="mb-2">ID: タイプ 内容</p>
-        <p className="text-slate-400 mb-2">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">1: start 開始</code></p>
+        <p className="mb-2">ID: タイプ 内容 | スタイル(任意)</p>
+        <p className="text-slate-400 mb-2">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start: term 開始 | bg:#f00 color:white</code></p>
         <p className="mb-2">ID -{'>'} ターゲット (ラベル)</p>
-        <p className="text-slate-400">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">1 -{'>'} 2 (はい)</code></p>
+        <p className="text-slate-400">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start -{'>'} next (はい)</code></p>
         <div className="mt-2 pt-2 border-t border-slate-700">
           <p className="font-bold mb-1">その他の設定:</p>
           <ul className="list-disc list-inside text-slate-300 space-y-1 mb-2">
