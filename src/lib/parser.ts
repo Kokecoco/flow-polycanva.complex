@@ -58,7 +58,7 @@ export function parseFlowchart(text: string): FlowGraph {
   // First pass: Find all nodes
   lines.forEach(line => {
     // Check for connection: id -> target (label)
-    const edgeMatch = line.match(/^([\w\d]+)\s*->\s*([\w\d]+)(?:\s*\((.*)\))?$/);
+    const edgeMatch = line.match(/^([\w\d\-]+)\s*->\s*([\w\d\-]+)(?:\s*\((.*)\))?$/);
     if (edgeMatch) {
       edges.push({
         from: edgeMatch[1],
@@ -68,8 +68,23 @@ export function parseFlowchart(text: string): FlowGraph {
       return;
     }
 
+    // Process styling block separated by '|'
+    const parts = line.split('|');
+    const nodeDef = parts[0].trim();
+    const rawStyle = parts.length > 1 ? parts.slice(1).join('|').trim() : '';
+    
+    let style: { bg?: string; color?: string } | undefined;
+    if (rawStyle) {
+      style = {};
+      const bgMatch = rawStyle.match(/bg[:=]\s*([^,\s]+)/);
+      if (bgMatch) style.bg = bgMatch[1];
+      const colorMatch = rawStyle.match(/color[:=]\s*([^,\s]+)/);
+      if (colorMatch) style.color = colorMatch[1];
+      if (!style.bg && !style.color) style = undefined;
+    }
+
     // Check for node definition: id: type text
-    const nodeMatch = line.match(/^([\w\d]+)\s*:\s*(\w+)?\s*(.*)$/);
+    const nodeMatch = nodeDef.match(/^([\w\d\-]+)\s*:\s*([a-zA-Z_]+)?\s*(.*)$/);
     if (nodeMatch) {
       const id = nodeMatch[1];
       const typeStr = (nodeMatch[2] || 'process').toLowerCase();
@@ -80,18 +95,21 @@ export function parseFlowchart(text: string): FlowGraph {
         type: typeMap[typeStr] || 'process',
         text: content,
         level: 0,
-        column: 0
+        column: 0,
+        style
       });
-    } else if (line.includes(':')) {
+    } else if (nodeDef.includes(':')) {
        // fallback for simple "id: text" where type is omitted
-       const [id, ...rest] = line.split(':');
+       const [idParts, ...rest] = nodeDef.split(':');
+       const id = idParts.trim();
        const content = rest.join(':').trim();
-       nodes.set(id.trim(), {
-         id: id.trim(),
+       nodes.set(id, {
+         id,
          type: 'process',
          text: content,
          level: 0,
-         column: 0
+         column: 0,
+         style
        });
     }
   });
