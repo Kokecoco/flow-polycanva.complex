@@ -1,9 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Editor } from './components/Editor';
 import { FlowchartRenderer } from './components/FlowchartRenderer';
+import { HelpModal } from './components/HelpModal';
 import { parseFlowchart } from './lib/parser';
 import { Share2, Download, FileJson, Upload } from 'lucide-react';
 import { motion } from 'motion/react';
+
+const FIRST_VISIT_KEY = 'jisflow_visited';
 
 const INITIAL_DATA = `# 矢羽: 合流時だけ
 # 文字サイズ: 14
@@ -31,6 +34,28 @@ mod5 -> dispNum (No) -> loopEnd
 
 export default function App() {
   const [markup, setMarkup] = useState(INITIAL_DATA);
+  const [helpOpen, setHelpOpen] = useState(false);
+
+  // Show help on first visit
+  useEffect(() => {
+    if (!localStorage.getItem(FIRST_VISIT_KEY)) {
+      localStorage.setItem(FIRST_VISIT_KEY, '1');
+      setHelpOpen(true);
+    }
+  }, []);
+
+  // F1 shortcut to open help
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'F1') {
+      e.preventDefault();
+      setHelpOpen(v => !v);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   const graph = useMemo(() => {
     return parseFlowchart(markup);
@@ -106,6 +131,13 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+      {/* Help Modal */}
+      <HelpModal
+        isOpen={helpOpen}
+        onClose={() => setHelpOpen(false)}
+        onApplySample={setMarkup}
+      />
+
       {/* Header */}
       <header className="h-14 border-b border-slate-200 bg-white flex items-center justify-between px-6 shrink-0 z-10">
         <div className="flex items-center gap-3">
@@ -153,7 +185,7 @@ export default function App() {
           animate={{ opacity: 1, x: 0 }}
           className="w-80 lg:w-96 shrink-0 h-full overflow-hidden"
         >
-          <Editor value={markup} onChange={setMarkup} />
+          <Editor value={markup} onChange={setMarkup} onOpenHelp={() => setHelpOpen(true)} />
         </motion.div>
 
         <div className="flex-1 overflow-hidden relative border-t border-slate-200 lg:border-t-0 bg-[#fbfcfd]">

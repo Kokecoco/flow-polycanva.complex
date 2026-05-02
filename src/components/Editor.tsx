@@ -1,18 +1,25 @@
 import React from 'react';
-import { Info } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
 interface Props {
   value: string;
   onChange: (value: string) => void;
+  onOpenHelp: () => void;
 }
 
-export const Editor: React.FC<Props> = ({ value, onChange }) => {
+export const Editor: React.FC<Props> = ({ value, onChange, onOpenHelp }) => {
   return (
     <div className="flex flex-col h-full bg-white border-r border-slate-200">
       <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50 shrink-0">
-        <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-          <span>エディタ</span>
-        </h2>
+        <h2 className="text-sm font-semibold text-slate-700">エディタ</h2>
+        <button
+          onClick={onOpenHelp}
+          className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors"
+          title="使い方ガイドを開く (F1)"
+        >
+          <HelpCircle size={13} />
+          使い方 (F1)
+        </button>
       </div>
       
       <div className="flex-1 relative font-mono text-sm min-h-0">
@@ -20,7 +27,7 @@ export const Editor: React.FC<Props> = ({ value, onChange }) => {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="w-full h-full p-4 resize-none focus:outline-none bg-transparent text-slate-800 leading-relaxed"
-          placeholder="ここにマークアップを入力してください..."
+          placeholder="ここにDSLを入力してください..."
           spellCheck={false}
           id="flow-editor"
         />
@@ -29,35 +36,17 @@ export const Editor: React.FC<Props> = ({ value, onChange }) => {
         </div>
       </div>
 
-      <div className="shrink-0 p-4 bg-slate-800 text-white text-xs border-t border-slate-200 z-10 overflow-y-auto max-h-48">
-        <h3 className="font-bold mb-2 flex items-center gap-1"><Info size={14} /> 使い方</h3>
-        <p className="mb-2">ID: タイプ 内容 | スタイル(任意)</p>
-        <p className="text-slate-400 mb-2">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start: term 開始 | bg:#f00 color:white</code></p>
-        <p className="mb-2">ID -{'>'} ターゲット (ラベル)</p>
-        <p className="text-slate-400 mb-1">例: <code className="text-slate-300 bg-slate-700 px-1 rounded">start -{'>'} next (はい)</code></p>
-        <p className="text-slate-400">連続: <code className="text-slate-300 bg-slate-700 px-1 rounded">a -{'>'} b -{'>'} c</code></p>
-        <div className="mt-2 pt-2 border-t border-slate-700">
-          <p className="font-bold mb-1">その他の設定:</p>
-          <ul className="list-disc list-inside text-slate-300 space-y-1 mb-2">
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 矢羽: 表示する</code> (常に表示)</li>
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 矢羽: 合流時だけ</code> (複数合流するパスのみ)</li>
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 矢羽: しない</code> (表示しない)</li>
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 文字サイズ: 16</code> (数字で指定。基本は11)</li>
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 横間隔: 260</code> (横のノード間隔、基本は260)</li>
-            <li><code className="text-slate-400 bg-slate-700 px-1 rounded"># 縦間隔: 160</code> (縦のノード間隔、基本は160)</li>
-          </ul>
-          <p className="font-bold mb-1">使用可能なタイプ:</p>
-          <ul className="list-disc list-inside text-slate-300 space-y-1">
-            <li>start / end / term (端子)</li>
-            <li>proc / process (処理)</li>
-            <li>dec / decision (判断)</li>
-            <li>io / input / output (入出力)</li>
-            <li>display / disp (表示)</li>
-            <li>manual / input (手操作入力)</li>
-            <li>loop_s / loop_e (繰り返し開始/終了)</li>
-            <li>prep / preparation (準備)</li>
-          </ul>
+      {/* Compact inline quick-reference */}
+      <div className="shrink-0 px-4 py-3 bg-slate-800 text-white text-[11px] border-t border-slate-200 z-10">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-slate-300">
+          <span><code className="text-slate-200 bg-slate-700 px-1 rounded">id: タイプ テキスト</code> ノード定義</span>
+          <span><code className="text-slate-200 bg-slate-700 px-1 rounded">a -{'>'} b (ラベル)</code> 接続</span>
+          <span><code className="text-slate-200 bg-slate-700 px-1 rounded">term dec proc io</code> 主なタイプ</span>
+          <span><code className="text-slate-200 bg-slate-700 px-1 rounded">disp loop_s loop_e</code> その他</span>
         </div>
+        <p className="mt-2 text-slate-500 text-[10px]">
+          詳細は <button onClick={onOpenHelp} className="underline text-slate-300 hover:text-white cursor-pointer">使い方ガイド (F1)</button> を参照
+        </p>
       </div>
     </div>
   );
