@@ -272,18 +272,35 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
             }
           } else if (isUpwards) {
                // Loop back
-               startX = start.x;
                startY = start.y + NODE_HEIGHT / 2;
-               endX = end.x;
                endY = end.y + NODE_HEIGHT / 2;
-               // Route around all blocks in that level range by going far left
+
                const minCol = Math.min(...graph.nodes.map(n => n.column));
-               const routeX = PADDING_X + minCol * gridSizeX - 80;
-               pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
-               
-               labelX = startX - 20;
-               labelY = startY - 10;
-               labelAnchor = 'end';
+
+               // Check if left-routing would cross any nodes at the same level
+               const wouldCrossGoingLeft =
+                 graph.nodes.some(n => n.level === fromNode.level && n.column < fromNode.column) ||
+                 graph.nodes.some(n => n.level === toNode.level && n.id !== toNode.id && n.column < toNode.column);
+
+               if (wouldCrossGoingLeft) {
+                 // Route right to avoid crossing
+                 startX = start.x + NODE_WIDTH;
+                 endX = end.x + NODE_WIDTH;
+                 const routeX = PADDING_X + (maxColumn + 1) * gridSizeX + 80;
+                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
+                 labelX = startX + 20;
+                 labelY = startY - 10;
+                 labelAnchor = 'start';
+               } else {
+                 // Route left (default)
+                 startX = start.x;
+                 endX = end.x;
+                 const routeX = PADDING_X + minCol * gridSizeX - 80;
+                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
+                 labelX = startX - 20;
+                 labelY = startY - 10;
+                 labelAnchor = 'end';
+               }
           } else {
                // Standard top to bottom
                if (fromNode.column === toNode.column) {
