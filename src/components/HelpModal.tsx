@@ -169,12 +169,12 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, onApplySample }) =
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm overflow-y-auto py-8 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
       onClick={(e) => { if (e.target === backdropRef.current) onClose(); }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-200 relative">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-200 flex flex-col max-h-[90vh]">
         {/* Modal header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white rounded-t-2xl z-10">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white rounded-t-2xl shrink-0">
           <div>
             <h2 className="text-base font-bold text-slate-800">使い方ガイド</h2>
             <p className="text-[11px] text-slate-400 mt-0.5">テキストDSLでフローチャートを記述します</p>
@@ -188,7 +188,7 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, onApplySample }) =
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 overflow-y-auto">
           {/* Overview */}
           <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800 leading-relaxed">
             <p className="font-semibold mb-1">基本の流れ</p>
