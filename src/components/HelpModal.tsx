@@ -49,27 +49,6 @@ start -> input -> auth -> dashboard (Yes) -> end
 auth -> error (No) -> retry -> input (Yes)
 retry -> end (No)`,
   },
-  {
-    label: '配列の線形探索',
-    code: `# 矢羽: 合流時だけ
-# 文字サイズ: 13
-# 縦間隔: 130
-
-start: term 開始
-init: proc i = 0 に初期化
-loop: loop_s 配列探索ループ
-check: dec i < 配列長？
-found: dec arr[i] == 目標値？
-returnIdx: io インデックス i を返す
-inc: proc i = i + 1
-loopEnd: loop_e 配列探索ループ
-notFound: io -1 を返す
-end: term 終了
-
-start -> init -> loop -> check -> found (Yes) -> returnIdx (Yes) -> end
-found -> inc (No) -> loopEnd -> check
-check -> notFound (No) -> end`,
-  },
 ];
 
 const NODE_TYPES = [
