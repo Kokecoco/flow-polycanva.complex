@@ -277,10 +277,12 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
 
                const minCol = Math.min(...graph.nodes.map(n => n.column));
 
-               // Check if left-routing would cross any nodes at the same level
+               // Check if left-routing would cross any nodes at the same level or
+               // any nodes at intermediate levels whose vertical edges would be crossed
                const wouldCrossGoingLeft =
                  graph.nodes.some(n => n.level === fromNode.level && n.column < fromNode.column) ||
-                 graph.nodes.some(n => n.level === toNode.level && n.id !== toNode.id && n.column < toNode.column);
+                 graph.nodes.some(n => n.level === toNode.level && n.id !== toNode.id && n.column < toNode.column) ||
+                 graph.nodes.some(n => n.level > toNode.level && n.level < fromNode.level && n.column < fromNode.column);
 
                if (wouldCrossGoingLeft) {
                  // Route right to avoid crossing
