@@ -262,6 +262,18 @@ export function parseFlowchart(text: string): FlowGraph {
     }
   });
 
+  // Post-process: Force 'end' nodes to be directly below 'start' and at the very bottom
+  const startNode = nodeArray.find(n => n.type === 'start');
+  const endNodes = nodeArray.filter(n => n.type === 'end');
+  if (endNodes.length > 0) {
+    const startCol = startNode ? startNode.column : 0;
+    const maxNonEndLevel = Math.max(...nodeArray.filter(n => n.type !== 'end').map(n => n.level), 0);
+    endNodes.forEach((en, i) => {
+      en.column = startCol;
+      en.level = maxNonEndLevel + 1 + i;
+    });
+  }
+
   return {
     nodes: nodeArray,
     edges: edges.filter(e => nodes.has(e.from) && nodes.has(e.to)),

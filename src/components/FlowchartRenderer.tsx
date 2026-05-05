@@ -271,8 +271,10 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
               labelAnchor = 'middle';
             }
           } else if (isUpwards) {
-               // Loop back
-               startY = start.y + NODE_HEIGHT / 2;
+               // Loop back - exit from bottom center of node, route down slightly then left/right and up
+               startX = start.x + NODE_WIDTH / 2;
+               startY = start.y + NODE_HEIGHT;
+               endX = end.x;
                endY = end.y + NODE_HEIGHT / 2;
 
                const minCol = Math.min(...graph.nodes.map(n => n.column));
@@ -284,23 +286,22 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
                  graph.nodes.some(n => n.level === toNode.level && n.id !== toNode.id && n.column < toNode.column) ||
                  graph.nodes.some(n => n.level > toNode.level && n.level < fromNode.level && n.column < fromNode.column);
 
+               const downOffset = 20;
+
                if (wouldCrossGoingLeft) {
                  // Route right to avoid crossing
-                 startX = start.x + NODE_WIDTH;
                  endX = end.x + NODE_WIDTH;
                  const routeX = PADDING_X + (maxColumn + 1) * gridSizeX + 80;
-                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
+                 pathD = `M ${startX} ${startY} L ${startX} ${startY + downOffset} L ${routeX} ${startY + downOffset} L ${routeX} ${endY} L ${endX} ${endY}`;
                  labelX = startX + 20;
-                 labelY = startY - 10;
+                 labelY = startY + 10;
                  labelAnchor = 'start';
                } else {
                  // Route left (default)
-                 startX = start.x;
-                 endX = end.x;
                  const routeX = PADDING_X + minCol * gridSizeX - 80;
-                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
+                 pathD = `M ${startX} ${startY} L ${startX} ${startY + downOffset} L ${routeX} ${startY + downOffset} L ${routeX} ${endY} L ${endX} ${endY}`;
                  labelX = startX - 20;
-                 labelY = startY - 10;
+                 labelY = startY + 10;
                  labelAnchor = 'end';
                }
           } else {
