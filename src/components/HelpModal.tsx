@@ -183,7 +183,7 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, onApplySample }) =
             <div className="space-y-3 text-sm">
               <p className="text-slate-600">
                 <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">ID: タイプ テキスト</code>
-                <span className="ml-2 text-slate-500">※ IDは英数字とハイフンのみ</span>
+                <span className="ml-2 text-slate-500">※ IDは英数字とハイフンのみ、テキストは\nで改行可</span>
               </p>
               <CodeBlock
                 code={`start: term 開始
