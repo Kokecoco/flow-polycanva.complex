@@ -68,7 +68,7 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
         );
 
       case 'preparation':
-        const pOffset = 15;
+        const pOffset = 25;
         return (
           <path
             d={`M ${x + pOffset} ${y} L ${x + w - pOffset} ${y} L ${x + w} ${y + h / 2} L ${x + w - pOffset} ${y + h} L ${x + pOffset} ${y + h} L ${x} ${y + h / 2} Z`}
@@ -237,6 +237,10 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
           let endX = end.x + NODE_WIDTH / 2;
           let endY = end.y;
 
+          if (toNode.type === 'manual_input') {
+            endY += 7.5;
+          }
+
           // If moving sideways or upwards, handle differently
           const isSideways = fromNode.level === toNode.level;
           const isUpwards = fromNode.level > toNode.level;
@@ -272,37 +276,18 @@ export const FlowchartRenderer: React.FC<Props> = ({ graph }) => {
             }
           } else if (isUpwards) {
                // Loop back
+               startX = start.x;
                startY = start.y + NODE_HEIGHT / 2;
+               endX = end.x;
                endY = end.y + NODE_HEIGHT / 2;
-
+               // Route around all blocks in that level range by going far left
                const minCol = Math.min(...graph.nodes.map(n => n.column));
-
-               // Check if left-routing would cross any nodes at the same level or
-               // any nodes at intermediate levels whose vertical edges would be crossed
-               const wouldCrossGoingLeft =
-                 graph.nodes.some(n => n.level === fromNode.level && n.column < fromNode.column) ||
-                 graph.nodes.some(n => n.level === toNode.level && n.id !== toNode.id && n.column < toNode.column) ||
-                 graph.nodes.some(n => n.level > toNode.level && n.level < fromNode.level && n.column < fromNode.column);
-
-               if (wouldCrossGoingLeft) {
-                 // Route right to avoid crossing
-                 startX = start.x + NODE_WIDTH;
-                 endX = end.x + NODE_WIDTH;
-                 const routeX = PADDING_X + (maxColumn + 1) * gridSizeX + 80;
-                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
-                 labelX = startX + 20;
-                 labelY = startY - 10;
-                 labelAnchor = 'start';
-               } else {
-                 // Route left (default)
-                 startX = start.x;
-                 endX = end.x;
-                 const routeX = PADDING_X + minCol * gridSizeX - 80;
-                 pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
-                 labelX = startX - 20;
-                 labelY = startY - 10;
-                 labelAnchor = 'end';
-               }
+               const routeX = PADDING_X + minCol * gridSizeX - 80;
+               pathD = `M ${startX} ${startY} L ${routeX} ${startY} L ${routeX} ${endY} L ${endX} ${endY}`;
+               
+               labelX = startX - 20;
+               labelY = startY - 10;
+               labelAnchor = 'end';
           } else {
                // Standard top to bottom
                if (fromNode.column === toNode.column) {
